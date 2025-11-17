@@ -96,6 +96,7 @@ class Data {
   static String defaultName = "new group";
   static String defaultDescription = "";
 
+  // for target desktop windows and linux
   static Map<String, String> images = {
     'ana' : 'faces/ana.png',
     'aureli' : 'faces/aureli.png',
@@ -108,4 +109,20 @@ class Data {
     'esteve' : 'faces/esteve.png',
     'new user': 'faces/new_user.png',
   };
+  /*
+  // for target Web, Android
+  // image hosting service https://imgbb.com/
+  static Map<String, String> images = {
+    'ana' : 'https://i.ibb.co/M6Z5Xvm/ana.png',
+    'aureli' : 'https://i.ibb.co/Yj6g20G/aureli.png',
+    'manel' : 'https://i.ibb.co/K64f1N7/manel.png',
+    'miquel' : 'https://i.ibb.co/cCmpb7G/miquel.png',
+    'maria' : 'https://i.ibb.co/6Z4xMSk/maria.png',
+    'maure' : 'https://i.ibb.co/Cb5b5BC/maure.png',
+    'eva' : 'https://i.ibb.co/2jydPBB/eva.png',
+    'eulalia' : 'https://i.ibb.co/fS6trmp/eulalia.png',
+    'esteve' : 'https://i.ibb.co/f2DpsMN/esteve.png',
+    'new user': 'https://i.ibb.co/Bs5vYLP/new-user.png',
+  };
+   */
 }
