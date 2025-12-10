@@ -1,6 +1,6 @@
-import 'dart:io'; // NECESSARI per poder llegir fitxers del disc dur
+import 'dart:io'; // per poder llegir fitxers
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart'; // NECESSARI pel selector
+import 'package:file_picker/file_picker.dart';
 import 'data.dart';
 
 class ScreenUser extends StatefulWidget {
@@ -18,9 +18,9 @@ class _ScreenUserState extends State<ScreenUser> {
   late TextEditingController _nameController;
   late TextEditingController _credentialController;
 
-  // NOVES VARIABLES D'ESTAT PER A LA IMATGE
+  // variables x la imatge
   String? _currentImagePath;
-  bool _isLocalFile = false; // Per saber si és un asset o un fitxer del PC
+  bool _isLocalFile = false; // x saber si es un asset o un fitxer del disc
 
   bool get isNewUser => widget.user == null;
 
@@ -30,11 +30,9 @@ class _ScreenUserState extends State<ScreenUser> {
     _nameController = TextEditingController(text: widget.user?.name ?? "");
     _credentialController = TextEditingController(text: widget.user?.credential ?? "");
 
-    // Inicialitzem la imatge actual
     String nameKey = isNewUser ? "new user" : widget.user!.name.toLowerCase();
     _currentImagePath = Data.images[nameKey] ?? Data.images['new user'];
 
-    // Comprovem si la imatge inicial és local (no comença per 'faces/')
     if (_currentImagePath != null && !_currentImagePath!.startsWith('faces/')) {
       _isLocalFile = true;
     }
@@ -47,18 +45,17 @@ class _ScreenUserState extends State<ScreenUser> {
     super.dispose();
   }
 
-  // NOVA FUNCIÓ: Obre el selector de fitxers
+  // obra el selector de fitxers
   Future<void> _pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image, // Només permetem imatges
+      type: FileType.image,
       dialogTitle: 'Select User Avatar',
     );
 
     if (result != null && result.files.single.path != null) {
       setState(() {
-        // Guardem la ruta absoluta del fitxer seleccionat al PC
         _currentImagePath = result.files.single.path!;
-        _isLocalFile = true; // Ara sabem que és un fitxer local
+        _isLocalFile = true;
       });
     }
   }
@@ -68,8 +65,6 @@ class _ScreenUserState extends State<ScreenUser> {
       final name = _nameController.text;
       final credential = _credentialController.text;
 
-      // GUARDEM LA NOVA IMATGE AL MAPA GLOBAL
-      // Utilitzem el nom en minúscules com a clau
       if (_currentImagePath != null) {
         Data.images[name.toLowerCase()] = _currentImagePath!;
       }
@@ -86,14 +81,13 @@ class _ScreenUserState extends State<ScreenUser> {
 
   @override
   Widget build(BuildContext context) {
-    // Determinim quin tipus d'imatge mostrar
     ImageProvider? imageProvider;
     if (_currentImagePath != null) {
       if (_isLocalFile) {
-        // Si és local (del PC), usem FileImage
+        // si es local usem FileImage
         imageProvider = FileImage(File(_currentImagePath!));
       } else {
-        // Si és un asset (de la carpeta faces/), usem AssetImage
+        // si es un asset (de la carpeta faces/), usem AssetImage
         imageProvider = AssetImage(_currentImagePath!);
       }
     }

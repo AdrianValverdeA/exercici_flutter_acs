@@ -24,7 +24,7 @@ class _ScreenGroupState extends State<ScreenGroup> {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(true), // Devuelve true para refrescar
+          onPressed: () => Navigator.of(context).pop(true), // retorna true para refrescar
         ),
       ),
       body: Container(
@@ -50,7 +50,7 @@ class _ScreenGroupState extends State<ScreenGroup> {
               )).then((_) => setState(() {}));
             }),
             _buildMenuButton("Places", Icons.place, Colors.blueGrey, () {
-              // Placeholder: Slide 3 dice "not for the moment"
+              // de moment no ha de fer res
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Places editing not implemented yet"))
               );
@@ -67,14 +67,14 @@ class _ScreenGroupState extends State<ScreenGroup> {
   }
 
   Widget _buildMenuButton(String title, IconData icon, Color color, VoidCallback onTap) {
-    return InkWell(
+    return InkWell( // animacio quadrat
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(
+        decoration: BoxDecoration( // box blau
           color: color,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Column(
+        child: Column( // icona + text
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 50, color: Colors.white),

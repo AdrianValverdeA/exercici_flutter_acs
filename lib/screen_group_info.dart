@@ -11,7 +11,7 @@ class ScreenGroupInfo extends StatefulWidget {
 }
 
 class _ScreenGroupInfoState extends State<ScreenGroupInfo> {
-  final _formKey = GlobalKey<FormState>(); // Clau pel formulari
+  final _formKey = GlobalKey<FormState>(); // serveix per validar
   late TextEditingController _nameController;
   late TextEditingController _descController;
 
@@ -32,7 +32,7 @@ class _ScreenGroupInfoState extends State<ScreenGroupInfo> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form( // Embolcallem amb Form
+        child: Form(
           key: _formKey,
           child: Column(
             children: [
@@ -42,7 +42,7 @@ class _ScreenGroupInfoState extends State<ScreenGroupInfo> {
                   labelText: "Group name",
                   border: OutlineInputBorder(),
                 ),
-                // Validació: Si està buit, retorna error
+                // Validacio: Si es buit retorna error
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a name';
@@ -62,7 +62,7 @@ class _ScreenGroupInfoState extends State<ScreenGroupInfo> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Comprovem si el formulari és vàlid
+                  // Comprovem si el formulari és valid
                   if (_formKey.currentState!.validate()) {
                     widget.userGroup.name = _nameController.text;
                     widget.userGroup.description = _descController.text;

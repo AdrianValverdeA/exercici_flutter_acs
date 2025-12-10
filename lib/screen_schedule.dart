@@ -13,7 +13,7 @@ class ScreenSchedule extends StatefulWidget {
 }
 
 class _ScreenScheduleState extends State<ScreenSchedule> {
-  late DateTime _fromDate;
+  late DateTime _fromDate; // variables temporals (es guardaran si fem submit)
   late DateTime _toDate;
   late TimeOfDay _fromTime;
   late TimeOfDay _toTime;
@@ -35,7 +35,7 @@ class _ScreenScheduleState extends State<ScreenSchedule> {
     }
   }
 
-  // Funció auxiliar per mostrar l'alerta (Slide 22)
+  // funcio per mostrar lalerta
   void _showAlert(String title, String message) {
     showDialog<void>(
       context: context,
@@ -55,23 +55,20 @@ class _ScreenScheduleState extends State<ScreenSchedule> {
     );
   }
 
-  // Funció per comparar TimeOfDay
+  // funcio per comparar TimeOfDay
   double _toDouble(TimeOfDay myTime) => myTime.hour + myTime.minute / 60.0;
 
   void _saveSchedule() {
-    // 1. Validació de Dates
     if (_fromDate.isAfter(_toDate)) {
       _showAlert("Range dates", "The From date is after the To date.\nPlease, select a new date range.");
       return;
     }
 
-    // 2. Validació d'Hores
     if (_toDouble(_fromTime) >= _toDouble(_toTime)) {
       _showAlert("Range time", "The From time must be before the To time.");
       return;
     }
 
-    // Si tot és correcte, guardem
     widget.userGroup.schedule.fromDate = _fromDate;
     widget.userGroup.schedule.toDate = _toDate;
     widget.userGroup.schedule.fromTime = _fromTime;
@@ -130,7 +127,6 @@ class _ScreenScheduleState extends State<ScreenSchedule> {
     );
   }
 
-  // ... (Els mètodes _buildDateRow i _buildTimeRow són els mateixos d'abans)
   Widget _buildDateRow(String label, DateTime current, Function(DateTime) onChange) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
