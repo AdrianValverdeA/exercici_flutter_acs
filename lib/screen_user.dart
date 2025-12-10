@@ -12,6 +12,7 @@ class ScreenUser extends StatefulWidget {
 }
 
 class _ScreenUserState extends State<ScreenUser> {
+  final _formKey = GlobalKey<FormState>(); // Nova clau pel Form
   late TextEditingController _nameController;
   late TextEditingController _credentialController;
 
@@ -20,10 +21,8 @@ class _ScreenUserState extends State<ScreenUser> {
   @override
   void initState() {
     super.initState();
-    _nameController =
-        TextEditingController(text: widget.user?.name ?? "new user");
-    _credentialController =
-        TextEditingController(text: widget.user?.credential ?? "00000");
+    _nameController = TextEditingController(text: widget.user?.name ?? "");
+    _credentialController = TextEditingController(text: widget.user?.credential ?? "");
   }
 
   @override
@@ -34,21 +33,27 @@ class _ScreenUserState extends State<ScreenUser> {
   }
 
   void _submit() {
-    final name = _nameController.text;
-    final credential = _credentialController.text;
+    // Validem abans de guardar
+    if (_formKey.currentState!.validate()) {
+      final name = _nameController.text;
+      final credential = _credentialController.text;
 
-    if (isNewUser) {
-      widget.userGroup.users.add(User(name, credential));
-    } else {
-      widget.user!.name = name;
-      widget.user!.credential = credential;
+      if (isNewUser) {
+        widget.userGroup.users.add(User(name, credential));
+      } else {
+        widget.user!.name = name;
+        widget.user!.credential = credential;
+      }
+      Navigator.of(context).pop();
     }
-
-    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+    // ... (Lògica dels avatars igual que abans) ...
+    String nameKey = isNewUser ? "new user" : widget.user!.name.toLowerCase();
+    String? imagePath = Data.images[nameKey] ?? Data.images['new user'];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("User"),
@@ -57,35 +62,61 @@ class _ScreenUserState extends State<ScreenUser> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.grey,
-              child: Icon(Icons.person, size: 60, color: Colors.white),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: "Name",
-                border: OutlineInputBorder(),
+        child: Form( // Embolcallem amb Form
+          key: _formKey,
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.grey,
+                backgroundImage: imagePath != null ? AssetImage(imagePath) : null,
+                child: imagePath == null
+                    ? const Icon(Icons.person, size: 60, color: Colors.white)
+                    : null,
               ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _credentialController,
-              decoration: const InputDecoration(
-                labelText: "Credential",
-                border: OutlineInputBorder(),
+              const SizedBox(height: 20),
+
+              // Validació Nom
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: "Name",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Name cannot be empty';
+                  }
+                  return null;
+                },
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _submit,
-              child: const Text("Submit"),
-            ),
-          ],
+              const SizedBox(height: 10),
+
+              // Validació Credencial
+              TextFormField(
+                controller: _credentialController,
+                decoration: const InputDecoration(
+                  labelText: "Credential",
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Credential cannot be empty';
+                  }
+                  // Expressió regular: exactament 5 dígits numèrics
+                  if (!RegExp(r'^\d{5}$').hasMatch(value)) {
+                    return 'Credential must be exactly 5 digits';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _submit,
+                child: const Text("Submit"),
+              ),
+            ],
+          ),
         ),
       ),
     );

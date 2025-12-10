@@ -29,8 +29,12 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   # to get DateFormater in screen_schedule
-  intl: ^0.18.1
-  weekday_selector: ^1.1.0
+  intl: ^0.20.2
+  # weekday_selector: ^1.1.0
+  weekday_selector:
+    git:
+      url: https://github.com/smaho-engineering/weekday_selector.git
+      ref: e9c604a8cabb04ea3a169c3379c270c59810e4b0
 
   flutter:
     sdk: flutter
@@ -61,7 +65,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  assets:
+    - faces/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 
-class Actions {
+class ActionsApp {
   static const String open = "open";
   static const String close = "close";
   static const String lock = "lock";
@@ -52,7 +52,7 @@ class Data {
       TimeOfDay(hour: 0, minute: 0), TimeOfDay(hour: 23, minute: 59)
   );
   static UserGroup admin = UserGroup("admin", "administrators", ["building",],
-      scheduleAdmin, Actions.all, [User("Ana", "89325"), User("Aureli", "87325"),]
+      scheduleAdmin, ActionsApp.all, [User("Ana", "89325"), User("Aureli", "87325"),]
   );
 
   // Managers
@@ -64,7 +64,7 @@ class Data {
   );
   static UserGroup managers = UserGroup("managers",
       "the CEO, CTO and heads of department", ["building",],
-      scheduleManagers, Actions.all, [User("Manel", "43762"), User("Miquel", "77832"),
+      scheduleManagers, ActionsApp.all, [User("Manel", "43762"), User("Miquel", "77832"),
         User("Maria", "89324"), User("Maure", "12345"),]
   );
 
@@ -78,7 +78,7 @@ class Data {
   static UserGroup employees = UserGroup("employees",
       "employees of own departments plus oursourcing companies",
       ["ground_floor", "room3", "corridor"],
-      scheduleEmployees, [Actions.open, Actions.close, Actions.unlockShortly], [User("Eva", "89325"), User("Eulalia", "87325"),
+      scheduleEmployees, [ActionsApp.open, ActionsApp.close, ActionsApp.unlockShortly], [User("Eva", "89325"), User("Eulalia", "87325"),
         User("Esteve", "43623"),]
   );
 
