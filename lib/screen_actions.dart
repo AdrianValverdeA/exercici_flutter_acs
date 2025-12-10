@@ -62,11 +62,11 @@ class _ScreenActionsState extends State<ScreenActions> {
   // (Mètode _getActionDescription igual que abans...)
   Widget? _getActionDescription(String action) {
     switch (action) {
-      case "open": return const Text("Opens an unlocked door");
-      case "close": return const Text("Closes an open door");
-      case "lock": return const Text("Locks a door");
-      case "unlock": return const Text("Unlocks a locked door");
-      case "unlock_shortly": return const Text("Unlocks for 10 seconds");
+      case "open": return const Text("opens an unlocked door");
+      case "close": return const Text("closes an open door");
+      case "lock": return const Text("Locks a door or all the doors in a room or group of rooms, if closed");
+      case "unlock": return const Text("Unlocks a locked door or all the locked doors in an room");
+      case "unlock_shortly": return const Text("Unlocks a door during 10 seconds and the locks it if it is closed");
       default: return null;
     }
   }

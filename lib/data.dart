@@ -52,7 +52,7 @@ class Data {
       TimeOfDay(hour: 0, minute: 0), TimeOfDay(hour: 23, minute: 59)
   );
   static UserGroup admin = UserGroup("admin", "administrators", ["building",],
-      scheduleAdmin, ActionsApp.all, [User("Ana", "89325"), User("Aureli", "87325"),]
+      scheduleAdmin, List.from(ActionsApp.all), [User("Ana", "89325"), User("Aureli", "87325"),]
   );
 
   // Managers
@@ -64,7 +64,7 @@ class Data {
   );
   static UserGroup managers = UserGroup("managers",
       "the CEO, CTO and heads of department", ["building",],
-      scheduleManagers, ActionsApp.all, [User("Manel", "43762"), User("Miquel", "77832"),
+      scheduleManagers, List.from(ActionsApp.all), [User("Manel", "43762"), User("Miquel", "77832"),
         User("Maria", "89324"), User("Maure", "12345"),]
   );
 
