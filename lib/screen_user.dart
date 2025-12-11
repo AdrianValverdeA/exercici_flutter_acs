@@ -1,4 +1,4 @@
-import 'dart:io'; // per poder llegir fitxers
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'data.dart';
@@ -18,9 +18,8 @@ class _ScreenUserState extends State<ScreenUser> {
   late TextEditingController _nameController;
   late TextEditingController _credentialController;
 
-  // variables x la imatge
   String? _currentImagePath;
-  bool _isLocalFile = false; // x saber si es un asset o un fitxer del disc
+  bool _isLocalFile = false;
 
   bool get isNewUser => widget.user == null;
 
@@ -30,11 +29,33 @@ class _ScreenUserState extends State<ScreenUser> {
     _nameController = TextEditingController(text: widget.user?.name ?? "");
     _credentialController = TextEditingController(text: widget.user?.credential ?? "");
 
-    String nameKey = isNewUser ? "new user" : widget.user!.name.toLowerCase();
-    _currentImagePath = Data.images[nameKey] ?? Data.images['new user'];
+    // Inicializar imagen al arrancar
+    _updateImageFromData(_nameController.text);
 
-    if (_currentImagePath != null && !_currentImagePath!.startsWith('faces/')) {
-      _isLocalFile = true;
+    // Escoltar canvis en el nom per canviar la foto en temps real
+    _nameController.addListener(() {
+      _updateImageFromData(_nameController.text);
+    });
+  }
+
+  // Funcio per buscar la imatge segons el nom
+  void _updateImageFromData(String name) {
+    String nameKey = name.toLowerCase();
+
+    // Si el nom existeix al mapa, agafem la seva foto. Si no, mantenim la que hi hagi o posem la de 'new user'
+    if (Data.images.containsKey(nameKey)) {
+      String path = Data.images[nameKey]!;
+      setState(() {
+        _currentImagePath = path;
+        // Si comença per faces/, és un asset. Si no, és un fitxer local (guardat abans)
+        _isLocalFile = !path.startsWith('faces/');
+      });
+    } else if (isNewUser && _currentImagePath == null) {
+      // Només si és nou i encara no tenim imatge, posem la per defecte
+      setState(() {
+        _currentImagePath = Data.images['new user'];
+        _isLocalFile = false;
+      });
     }
   }
 
@@ -45,7 +66,6 @@ class _ScreenUserState extends State<ScreenUser> {
     super.dispose();
   }
 
-  // obra el selector de fitxers
   Future<void> _pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
@@ -65,6 +85,7 @@ class _ScreenUserState extends State<ScreenUser> {
       final name = _nameController.text;
       final credential = _credentialController.text;
 
+      // guardem la imatge associada al nom (per si es torna a obrir)
       if (_currentImagePath != null) {
         Data.images[name.toLowerCase()] = _currentImagePath!;
       }
@@ -84,10 +105,8 @@ class _ScreenUserState extends State<ScreenUser> {
     ImageProvider? imageProvider;
     if (_currentImagePath != null) {
       if (_isLocalFile) {
-        // si es local usem FileImage
         imageProvider = FileImage(File(_currentImagePath!));
       } else {
-        // si es un asset (de la carpeta faces/), usem AssetImage
         imageProvider = AssetImage(_currentImagePath!);
       }
     }
@@ -104,9 +123,8 @@ class _ScreenUserState extends State<ScreenUser> {
           key: _formKey,
           child: Column(
             children: [
-              // Embolcallem amb InkWell per fer-ho clicable
               InkWell(
-                onTap: _pickImage, // Cridem la funció en fer clic
+                onTap: _pickImage,
                 borderRadius: BorderRadius.circular(50),
                 child: Stack(
                   alignment: Alignment.center,
@@ -119,7 +137,6 @@ class _ScreenUserState extends State<ScreenUser> {
                           ? const Icon(Icons.person, size: 60, color: Colors.white)
                           : null,
                     ),
-                    // Afegim una icona de càmera petita per indicar que es pot canviar
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -136,8 +153,6 @@ class _ScreenUserState extends State<ScreenUser> {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Validació Nom
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
@@ -150,8 +165,6 @@ class _ScreenUserState extends State<ScreenUser> {
                 },
               ),
               const SizedBox(height: 10),
-
-              // Validació Credencial
               TextFormField(
                 controller: _credentialController,
                 decoration: const InputDecoration(
